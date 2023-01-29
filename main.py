@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import streamlit as st
 import plotly.express as px
+from time import sleep
 
 
 def get_data(input_loc):
@@ -20,6 +21,7 @@ st.set_page_config(
 
 st.markdown("# :cloud: Tom's :blue[Weather Forecasts] :sunny:")
 st.markdown("---")
+st.subheader("Enter three locations from anywhere in the world to receive their 3 day forecast")
 col1, col2, col3 = st.columns(3)
 with col1:
     location = st.text_input("Enter a location")
@@ -48,10 +50,13 @@ if location and location2 and location3:
 
     df = pd.DataFrame(clean_data)
     df["datetime"] = pd.to_datetime(df["datetime"])
+    with st.spinner("Loading..."):
+        sleep(1)
     st.markdown("---")
-    selection = st.selectbox("What Datapoint Do You Want To Show?", ["Temperature", "Chance of Rain", "Chance of Snow"])
-    st.markdown("---")
-    if selection == 'Chance of Rain':
+    selection = st.selectbox("What Datapoint Do You Want To Show?", ["Choose an Option...", "Temperature", "Chance of Rain", "Chance of Snow"])
+    if selection == "Choose an Option...":
+        st.stop()
+    elif selection == 'Chance of Rain':
         figure = px.area(df,
                          x="datetime",
                          y=selection.replace(" ", "_").lower(),
@@ -85,4 +90,5 @@ if location and location2 and location3:
         st.plotly_chart(figure, use_container_width=True)
 
     st.markdown("---")
+    st.markdown("### :blue[Raw Data]")
     st.dataframe(df, use_container_width=True)
