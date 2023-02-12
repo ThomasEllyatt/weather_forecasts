@@ -5,8 +5,9 @@ import plotly.express as px
 from time import sleep
 
 
+@st.cache_data
 def get_data(input_loc):
-    url = f"http://api.weatherapi.com/v1/forecast.json?key=93366c8655fd4a248f0200040231101&q={input_loc}&days=10&aqi=no&alerts=no"
+    url = f"http://api.weatherapi.com/v1/forecast.json?key=93366c8655fd4a248f0200040231101&q={input_loc}&days=3aqi=no&alerts=no"
     response = requests.get(url)
     response_data = response.json()
     return response_data
